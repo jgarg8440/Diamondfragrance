@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "./CartContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from '../config';
+
 
 // Premium Background Images
 const backgroundImages = [
@@ -78,15 +80,16 @@ const Checkout = () => {
       const totalAmount = getTotalPrice();
       // Initialize Order
       const { data } = await axios.post(
-        "http://localhost:5000/api/create-order",
-        {
-          amount: totalAmount,
-          currency: "INR",
-          items: cartItems,
-          customerInfo: customerInfo
-        },
-        { withCredentials: true }
-      );
+  `${API_URL}/api/create-order`,
+  {
+    amount: totalAmount,
+    currency: "INR",
+    items: cartItems,
+    customerInfo: customerInfo
+  },
+  { withCredentials: true }
+);
+
 
       // Razorpay Options
       const options = {
@@ -99,15 +102,16 @@ const Checkout = () => {
         order_id: data.orderId,
         handler: async function (response) {
           try {
-            const verifyRes = await axios.post(
-              "http://localhost:5000/api/verify-payment",
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature
-              },
-              { withCredentials: true }
-            );
+           const verifyRes = await axios.post(
+  `${API_URL}/api/verify-payment`,
+  {
+    razorpay_order_id: response.razorpay_order_id,
+    razorpay_payment_id: response.razorpay_payment_id,
+    razorpay_signature: response.razorpay_signature
+  },
+  { withCredentials: true }
+);
+
 
             if (verifyRes.data.success) {
               setOrderDetails(verifyRes.data.order);

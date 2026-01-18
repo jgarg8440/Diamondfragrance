@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "./CartContext";
 import { useNavigate, Link } from "react-router-dom";
+import { API_URL } from '../config';
+
 
 // Validated Image Paths
 const backgroundImages = [
@@ -33,11 +35,12 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/login",
-        { email, password },
-        { withCredentials: true }
-      );
+ 
+const res = await axios.post(
+  `${API_URL}/api/login`,
+  { email, password },
+  { withCredentials: true }
+);
       setUser({ email, name: res.data.name });
       navigate("/");
     } catch (err) {

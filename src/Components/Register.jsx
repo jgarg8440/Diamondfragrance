@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "./CartContext";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from '../config';
+
 
 // Using the same high-quality assets for consistency
 const backgroundImages = [
@@ -38,7 +40,7 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/register", form);
+const res = await axios.post(`${API_URL}/register`, form);
       // alert(res.data.message); // Optional: removed for smoother flow
       setUser(form);
       localStorage.setItem("diamondFragranceUser", JSON.stringify(form));

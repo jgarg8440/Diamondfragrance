@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios for backend connection
+import { API_URL } from '../config';
+
 
 const EMAIL = "diamondfragrance8@gmail.com";
 const PHONE_NUMBER = "+918000921548";
@@ -42,7 +44,7 @@ const Contact = () => {
         message: `Phone: ${formData.phone}\n\nMessage: ${formData.message}` 
       };
 
-      await axios.post("http://localhost:5000/api/contact", payload);
+await axios.post(`${API_URL}/api/contact`, payload);
       
       setStatus("success");
       setFormData({ name: "", phone: "", email: "", message: "" }); // Reset Form

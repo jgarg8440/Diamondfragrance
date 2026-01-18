@@ -13,12 +13,27 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173", // Local development
+  process.env.FRONTEND_URL // Production frontend
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, Postman)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS not allowed'));
+      }
+    },
     credentials: true
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -192,11 +207,13 @@ app.post("/api/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax"
-    });
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // TRUE in production
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+});
+
 
     res.json({
       message: "Login successful",
@@ -500,7 +517,7 @@ app.post("/api/forgot-password", async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
     
     // Create the Reset Link (Point to your Frontend URL)
-    const resetLink = `http://localhost:5173/reset-password/${token}`;
+const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
     // Send Email
     await transporter.sendMail({

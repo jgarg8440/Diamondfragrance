@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from '../config';
+
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -8,9 +10,9 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/orders", { 
-          withCredentials: true 
-        });
+const res = await axios.get(`${API_URL}/api/my-orders`, { 
+  withCredentials: true 
+});
         setOrders(res.data);
         setLoading(false);
       } catch (err) {

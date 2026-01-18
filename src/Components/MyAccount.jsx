@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "./CartContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from '../config';
+
 
 const MyAccount = () => {
   const { user, setUser } = useCart();
@@ -23,9 +25,9 @@ const MyAccount = () => {
       if (!user) return;
       try {
         // Assuming you have this endpoint. If not, see backend note below.
-        const { data } = await axios.get("http://localhost:5000/api/my-orders", { 
-          withCredentials: true 
-        });
+const { data } = await axios.get(`${API_URL}/api/my-orders`, { 
+  withCredentials: true 
+});
         setOrders(data.orders || []);
       } catch (error) {
         console.error("Failed to fetch orders:", error);

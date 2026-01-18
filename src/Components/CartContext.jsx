@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from '../config';
+
 
 const CartContext = createContext();
 
@@ -18,7 +20,7 @@ export const CartProvider = ({ children }) => {
     const checkUserLoggedIn = async () => {
       try {
         // Ask backend: "Is there a valid cookie?"
-        const { data } = await axios.get("http://localhost:5000/api/me");
+const { data } = await axios.get(`${API_URL}/api/me`);
         setUser(data.user); // If yes, set user
       } catch (error) {
         setUser(null); // If no, stay logged out

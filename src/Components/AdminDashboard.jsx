@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "./CartContext";
+import { API_URL } from '../config';
+
 
 const AdminDashboard = () => {
   const { user, isAuthChecking } = useCart();
@@ -27,10 +29,11 @@ const AdminDashboard = () => {
     // 2. Fetch Data
     const fetchAdminData = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/admin/orders");
+const { data } = await axios.get(`${API_URL}/api/admin/orders`);
         setOrders(data.orders);
         setStats(data.stats);
-      } catch (error) {
+      }
+       catch (error) {
         console.error("Admin Access Error:", error);
       } finally {
         setLoading(false);
@@ -42,7 +45,7 @@ const AdminDashboard = () => {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/order/${orderId}`, { status: newStatus });
+await axios.put(`${API_URL}/api/admin/order/${orderId}`, { status: newStatus });
       // Update UI locally (Optimistic Update)
       setOrders(orders.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
       alert(`Order updated to ${newStatus}`);
