@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* --- CRITICAL FIX FOR VIDEO BACKGROUND --- */
+body {
+  margin: 0;
+  padding: 0;
+  /* This must be transparent so the fixed video behind it is visible */
+  background-color: transparent; 
+  color: white; 
+}
+
+#root {
+  /* This also must be transparent */
+  background-color: transparent;
+}
+/* ----------------------------------------- */
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideUpFade {
+  0% {
+    transform: translate(-50%, 100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
